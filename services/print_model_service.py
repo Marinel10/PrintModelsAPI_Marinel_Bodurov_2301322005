@@ -61,7 +61,8 @@ class PrintModelService:
             print_time_minutes=data.print_time_minutes,
             copies=data.copies,
             designer_id=data.designer_id,
-            category_id=data.category_id
+            category_id=data.category_id,
+            difficulty=data.difficulty
         )
 
         db_session.add(print_model)
@@ -88,7 +89,8 @@ class PrintModelService:
             "instructions",
             "print_time_minutes",
             "copies",
-            "designer_id"
+            "designer_id",
+            "difficulty"
         )
 
         for field in required_fields:
@@ -127,6 +129,9 @@ class PrintModelService:
 
         # Променяме само подадените полета
         for field, value in changes.items():
+            if field == "difficulty":
+                value = value.value
+
             setattr(print_model, field, value)
 
         try:

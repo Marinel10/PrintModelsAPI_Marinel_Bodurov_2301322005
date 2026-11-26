@@ -20,6 +20,8 @@ class PrintModel(Base):
     print_time_minutes: Mapped[int]
     copies: Mapped[int]
 
+    difficulty: Mapped[str] = mapped_column(nullable=False,server_default="medium")
+
     designer_id: Mapped[int] = mapped_column(
         ForeignKey("designers.id", ondelete="RESTRICT")
     )
@@ -40,4 +42,5 @@ class PrintModel(Base):
     __table_args__ = (
         CheckConstraint("copies > 0",name="ck_copies_positive"),
         CheckConstraint("print_time_minutes > 0",name="ck_print_time_positive"),
+        CheckConstraint("difficulty IN ('easy', 'medium', 'hard')", name="ck_print_models_difficulty")
     )
