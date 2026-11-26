@@ -18,7 +18,10 @@ class PrintModelMaterialRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     print_model_id: int
+    print_model_name:str
+    print_copies: int
     material_id: int
+    material_name: str
     quantity: float
     unit: MaterialUnit
 

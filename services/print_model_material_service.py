@@ -17,20 +17,39 @@ from exceptions import AppError, NotFound, ConflictError
 class PrintModelMaterialService:
 
     # All materials for 3D model
-    def list(self, print_model_id: int, db_session: Session) -> list[PrintModelMaterial]:
+    def list(self, print_model_id: int, db_session: Session) -> list[PrintModelMaterialRead]:
 
         print_model = db_session.get(PrintModel, print_model_id)
 
         if print_model is None:
             raise NotFound("Print model not found")
 
-        stmt = select(PrintModelMaterial).where(
-            PrintModelMaterial.print_model_id == print_model_id
+        stmt = (
+            select(PrintModelMaterial, Material.name)
+            .join(Material, PrintModelMaterial.material_id == Material.id)
+            .where(PrintModelMaterial.print_model_id == print_model_id)
         )
 
-        print_model_materials =list(db_session.execute(stmt).scalars().all())
+        materials = db_session.execute(stmt).all()
 
-        return print_model_materials
+        result = []
+
+
+
+        for association, material_name in materials:
+            result.append(
+                PrintModelMaterialRead(
+                    print_model_id=association.print_model_id,
+                    print_copies=print_model.copies,
+                    print_model_name=print_model.name,
+                    material_id=association.material_id,
+                    material_name=material_name,
+                    quantity=association.quantity,
+                    unit=association.unit
+                )
+            )
+
+        return result
 
     # Add material to 3D model
     def create(self, print_model_id: int, data: PrintModelMaterialCreate, db_session: Session
@@ -141,19 +160,22 @@ class PrintModelMaterialService:
         if print_model is None:
             raise NotFound("Print model not found")
 
-        # 50 + 05 = 55 ( ФН: 2301322005)
+        # 50 + 05 = 55 (ФН: 2301322005)
         if copies < 1 or copies > 55:
             raise AppError("Copies must be between 1 and 55")
+
 
         materials = self.list(print_model_id, db_session)
 
         result = []
 
         for material in materials:
-            new_quantity = material.quantity * copies
+            quantity_per_copy = material.quantity / print_model.copies
+            new_quantity = quantity_per_copy * copies
 
             result.append({
                 "material_id": material.material_id,
+                "material_name": material.material_name,
                 "quantity": new_quantity,
                 "unit": material.unit
             })
