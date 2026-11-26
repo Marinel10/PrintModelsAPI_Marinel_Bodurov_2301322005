@@ -42,6 +42,7 @@ class PrintModelMaterialService:
                     print_model_id=association.print_model_id,
                     print_copies=print_model.copies,
                     print_model_name=print_model.name,
+                    print_model_difficulty = print_model.difficulty,
                     material_id=association.material_id,
                     material_name=material_name,
                     quantity=association.quantity,
@@ -188,5 +189,6 @@ class PrintModelMaterialService:
             "copies": copies,
             "designer_id": print_model.designer_id,
             "category_id": print_model.category_id,
+            "difficulty": print_model.difficulty,
             "materials": result
         }

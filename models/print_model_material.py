@@ -20,6 +20,7 @@ class PrintModelMaterialRead(BaseModel):
     print_model_id: int
     print_model_name:str
     print_copies: int
+    print_model_difficulty: str
     material_id: int
     material_name: str
     quantity: float

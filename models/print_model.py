@@ -8,6 +8,7 @@ class PrintModelCreate(BaseModel):
     copies: int = Field(gt=0)
     designer_id: int = Field(gt=0)
     category_id: int | None = Field(default=None, gt=0)
+    difficulty:str | None = Field(default="medium", gt=0)
 
     @field_validator("name", "instructions")
     @classmethod
@@ -30,6 +31,7 @@ class PrintModelRead(BaseModel):
     copies: int
     designer_id: int
     category_id: int | None
+    difficulty: str
 
 
 class PrintModelUpdate(BaseModel):
@@ -39,6 +41,7 @@ class PrintModelUpdate(BaseModel):
     copies: int | None = Field(default=None, gt=0)
     designer_id: int | None = Field(default=None, gt=0)
     category_id: int | None = Field(default=None, gt=0)
+    difficulty: str | None = Field(default="medium", gt=0)
 
     @field_validator("name", "instructions")
     @classmethod
