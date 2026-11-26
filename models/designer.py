@@ -4,7 +4,6 @@ from pydantic import BaseModel, Field, EmailStr, ConfigDict, field_validator
 class DesignerCreate(BaseModel):
     name: str = Field(min_length=1, max_length=110)
     email: EmailStr
-    email: EmailStr
 
     @field_validator("name")
     @classmethod
