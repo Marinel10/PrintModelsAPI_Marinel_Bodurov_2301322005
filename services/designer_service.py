@@ -16,7 +16,7 @@ class DesignerService:
     def list(self, db_session: Session) -> list[Designer]:
 
         stmt = select(Designer)
-        designers = list(db_session.scalars(select(stmt)).all())
+        designers = list(db_session.scalars(stmt).all())
 
         return designers
 
